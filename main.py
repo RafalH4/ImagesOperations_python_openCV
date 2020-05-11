@@ -1,4 +1,5 @@
 from normalize import Normalize as norm
+from arOp_Grey import ArOpGrey as ar
 
-e = norm()
-e.geometricColorNormalize('zdj1.jpg', 'zdj3.jpg')
+e = ar()
+e.sumImageWithNumber("temp_img/zdj3.jpg", -40)
