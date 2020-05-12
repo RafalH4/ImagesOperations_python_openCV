@@ -18,33 +18,25 @@ class ArOpGrey:
 
         for i in range(height):
             for j in range(width):
-                pktValue = int(img[i, j] + number)
-                qMax = qMax if qMax < pktValue else pktValue
+                sum = np.ceil(img[i, j] + number)
+                resultImg[i, j] = sum
+                if fMax < sum:
+                    if sum > 255:
+                        fMax = 255
+                    else:
+                        fMax = sum
 
-        if qMax>255:
-            dMax = qMax - 255
-            x = dMax/255
-
-        for i in range(height):
-            for j in range(width):
-                resultImg[i, j] = np.ceil((img[i, j] - img[i, j]*x) + (number - (number*x)))
-                fMin = resultImg[i, j] if fMin > resultImg[i, j] else fMin
-                fMax = resultImg[i, j] if fMax < resultImg[i, j] else fMax
+                if fMin > sum:
+                    if sum < 0:
+                        fMin = 0
+                    else:
+                        fMin = sum
 
         for i in range(height):
             for j in range(width):
                 normalizedImg[i, j] = (255*(resultImg[i, j]-fMin))/(fMax-fMin)
 
         self.show(img, resultImg, normalizedImg)
-
-    def normalizeImage(self, img, fMax, fMin):
-        width = img.shape[1]
-        height = img.shape[0]
-        imageToReturn = np.empty((height, width), dtype=np.uint8)
-        for i in range(height):
-            for j in range(width):
-                imageToReturn[i, j] = 255*((img[i, j] - fMin)/(fMax-fMin))
-        return imageToReturn
 
     def show(self, img1, img2, img3):
         cv2.imshow("1", img1)
