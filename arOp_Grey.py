@@ -138,9 +138,6 @@ class ArOpGrey:
         self.show(img, resultImg, normalizedImg)
 
     def multiplyImgWithImg(self, img1, img2):
-        QMax = 0
-        DMax = 0
-        X=0
         fMax = 0
         fMin = 255
         img1 = cv2.imread(img1, cv2.IMREAD_GRAYSCALE)
@@ -167,6 +164,33 @@ class ArOpGrey:
                     fMin = tempValue
                 if fMax < tempValue:
                     fMax = tempValue
+
+        normalizedImg = self.normalizeImg(resultImg, fMax, fMin)
+        self.show(img1, img2, normalizedImg)
+
+    def mixImagesWithRate(self, img1, img2, rate):
+        QMax = 0
+        DMax = 0
+        fMax = 0
+        fMin = 255
+        img1 = cv2.imread(img1, cv2.IMREAD_GRAYSCALE)
+        img2 = cv2.imread(img2, cv2.IMREAD_GRAYSCALE)
+
+        if(img1.shape[0] != img2.shape[0] or img1.shape[1] != img2.shape[1]):
+            print("Obraz musi być ujednolicony")
+        width = img1.shape[1]
+        height = img1.shape[0]
+
+        resultImg = np.empty((height, width), dtype=np.uint8)
+
+        for i in range(height):
+            for j in range(width):
+                resultImg[i, j] = np.ceil(float(img1[i, j])*rate + float(img2[i, j])*(1-rate))
+
+                if fMin > resultImg[i, j]:
+                    fMin = resultImg[i, j]
+                if fMax < resultImg[i, j]:
+                    fMax = resultImg[i, j]
 
         normalizedImg = self.normalizeImg(resultImg, fMax, fMin)
         self.show(img1, img2, normalizedImg)

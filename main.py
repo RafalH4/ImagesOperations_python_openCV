@@ -11,5 +11,5 @@ ar = ar()
 #e.moveImage("temp_img/2/1.jpg", 60, 60)
 #e.turnImage("temp_img/2/1.jpg", 10)
 #ar.multiplyImgWithNumber("temp_img/zdj1.jpg", 100)
-ar.multiplyImgWithImg("temp_img/2/1.jpg", "temp_img/2/2.jpg")
+ar.mixImagesWithRate("temp_img/2/1.jpg", "temp_img/2/2.jpg", 0.4)
  
