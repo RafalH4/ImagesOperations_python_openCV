@@ -253,7 +253,38 @@ class ArOpGrey:
         normalizedImg = self.normalizeImg(resultImg, fMax, fMin)
         self.show(img, resultImg, normalizedImg)
 
+    def divideImgByImg(self, img1, img2):
+        fMax = 0
+        fMin = 255
+        QMax = 0
+        img1 = cv2.imread(img1, cv2.IMREAD_GRAYSCALE)
+        img2 = cv2.imread(img2, cv2.IMREAD_GRAYSCALE)
 
+        if (img1.shape[0] != img2.shape[0] or img1.shape[1] != img2.shape[1]):
+            print("Obraz musi być ujednolicony")
+        width = img1.shape[1]
+        height = img1.shape[0]
+        resultImg = np.empty((height, width), dtype=np.uint8)
+
+        for i in range(height):
+            for j in range(width):
+                if QMax < int(img1[i, j] + img2[i, j]):
+                    QMax = int(img1[i, j] + img2[i, j])
+
+        for i in range(height):
+            for j in range(width):
+                tempValue = (int(img1[i, j] + img2[i, j])*255)/QMax
+                resultImg[i, j] = np.ceil(tempValue)
+                if fMin > tempValue:
+                    fMin = tempValue
+                if fMax < tempValue:
+                    fMax = tempValue
+        normalizedImg = self.normalizeImg(resultImg, fMax, fMin)
+        self.show(img1, img2, normalizedImg)
+
+    def extractImg(self, img, number):
+        newNumber = 1/number
+        self.escalateImg(img, number)
 
     def normalizeImg(self, img, fMax, fMin):
         width = img.shape[1]

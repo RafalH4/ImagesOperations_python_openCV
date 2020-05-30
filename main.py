@@ -13,5 +13,6 @@ ar = ar()
 #ar.multiplyImgWithNumber("temp_img/zdj1.jpg", 100)
 #ar.mixImagesWithRate("temp_img/2/1.jpg", "temp_img/2/2.jpg", 0.4)
 #ar.escalateImg("temp_img/2/1.jpg", 2)
-ar.divideImgByNumber("temp_img/2/2.jpg", 50)
- 
+#ar.divideImgByNumber("temp_img/2/2.jpg", 50)
+#ar.divideImgByImg("temp_img/2/1.jpg", "temp_img/2/2.jpg")
+ar.extractImg("temp_img/2/1.jpg", 3)
