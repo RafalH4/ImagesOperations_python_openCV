@@ -232,8 +232,6 @@ class ArOpGrey:
         img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
         width = img.shape[1]
         height = img.shape[0]
-
-        normalizedImg = np.empty((height, width), dtype=np.uint8)
         resultImg = np.empty((height, width), dtype=np.uint8)
 
         for i in range(height):
@@ -285,6 +283,37 @@ class ArOpGrey:
     def extractImg(self, img, number):
         newNumber = 1/number
         self.escalateImg(img, number)
+
+    def logImg(self, img):
+        fMax = 0
+        fMin = 255
+        fImgMax = 0
+        img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+
+        width = img.shape[1]
+        height = img.shape[0]
+        resultImg = np.empty((height, width), dtype=np.uint8)
+
+        for i in range(height):
+            for j in range(width):
+                if fImgMax < int(img[i, j]):
+                    fImgMax = int(img[i, j])
+
+        for i in range(height):
+            for j in range(width):
+                if int(img[i, j]) == 0:
+                    resultImg[i, j] = 0
+                else:
+                    resultImg[i, j] = (np.log(1 + int(img[i, j])))/np.log(1 + fImgMax)*255
+
+                if fMin > resultImg[i, j]:
+                    fMin = resultImg[i, j]
+                if fMax < resultImg[i, j]:
+                    fMax = resultImg[i, j]
+                resultImg[i, j] = np.ceil(resultImg[i, j])
+
+        normalizedImg = self.normalizeImg(resultImg, fMax, fMin)
+        self.show(img, resultImg, normalizedImg)
 
     def normalizeImg(self, img, fMax, fMin):
         width = img.shape[1]
