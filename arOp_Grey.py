@@ -225,6 +225,35 @@ class ArOpGrey:
         normalizedImg = self.normalizeImg(resultImg, fMax, fMin)
         self.show(img, resultImg, normalizedImg)
 
+    def divideImgByNumber(self, img, number):
+        fMax = 0
+        fMin = 255
+        QMax = 0
+        img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+        width = img.shape[1]
+        height = img.shape[0]
+
+        normalizedImg = np.empty((height, width), dtype=np.uint8)
+        resultImg = np.empty((height, width), dtype=np.uint8)
+
+        for i in range(height):
+            for j in range(width):
+                if QMax < int(img[i, j]+number):
+                    QMax = int(img[i, j]+number)
+
+        for i in range(height):
+            for j in range(width):
+                tempValue = (int(img[i, j]+number)*255)/QMax
+                resultImg[i, j] = np.ceil(tempValue)
+                if fMin > tempValue:
+                    fMin = tempValue
+                if fMax < tempValue:
+                    fMax = tempValue
+
+        normalizedImg = self.normalizeImg(resultImg, fMax, fMin)
+        self.show(img, resultImg, normalizedImg)
+
+
 
     def normalizeImg(self, img, fMax, fMin):
         width = img.shape[1]
