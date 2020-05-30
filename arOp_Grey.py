@@ -169,8 +169,6 @@ class ArOpGrey:
         self.show(img1, img2, normalizedImg)
 
     def mixImagesWithRate(self, img1, img2, rate):
-        QMax = 0
-        DMax = 0
         fMax = 0
         fMin = 255
         img1 = cv2.imread(img1, cv2.IMREAD_GRAYSCALE)
@@ -194,6 +192,39 @@ class ArOpGrey:
 
         normalizedImg = self.normalizeImg(resultImg, fMax, fMin)
         self.show(img1, img2, normalizedImg)
+
+    def escalateImg(self, img, number):
+        fMax = 0
+        fMin = 255
+        fImgMax = 0
+        img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+        width = img.shape[1]
+        height = img.shape[0]
+        resultImg = np.empty((height, width), dtype=np.uint8)
+
+        for i in range(height):
+            for j in range(width):
+                if fImgMax < int(img[i, j]):
+                    fImgMax = int(img[i, j])
+
+        for i in range(height):
+            for j in range(width):
+                if int(img[i, j]) == 255:
+                    resultImg[i, j] = 255
+                elif int(img[i, j]) == 0:
+                    resultImg[i, j] = 0
+                else:
+                    resultImg[i, j] = pow(int(img[i, j])/fImgMax, number)*255
+
+                if fMin > resultImg[i, j]:
+                    fMin = resultImg[i, j]
+                if fMax < resultImg[i, j]:
+                    fMax = resultImg[i, j]
+                resultImg[i, j] = np.ceil(resultImg[i, j])
+
+        normalizedImg = self.normalizeImg(resultImg, fMax, fMin)
+        self.show(img, resultImg, normalizedImg)
+
 
     def normalizeImg(self, img, fMax, fMin):
         width = img.shape[1]
