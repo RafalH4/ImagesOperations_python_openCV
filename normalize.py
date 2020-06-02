@@ -104,9 +104,6 @@ class Normalize:
         self.show(resultImg1, resultImg2)
         
 
-
-
-
     #Ujednolicanie obrazów RGB geometrycznie
     def geometricColorNormalize(self, photo1, photo2):
         img1 = cv2.imread(photo1, cv2.IMREAD_COLOR)

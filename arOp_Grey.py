@@ -44,7 +44,6 @@ class ArOpGrey:
             print("Obraz musi być ujednolicony")
         width = img1.shape[1]
         height = img1.shape[0]
-        #normalizedImg = np.empty((height, width), dtype=np.uint8)
         resultImg = np.empty((height, width), dtype=np.uint8)
 
         for i in range(height):
@@ -62,53 +61,8 @@ class ArOpGrey:
                     else:
                         fMin = resultImg[i, j]
 
-        normalizedImg = self.normalizeImg(resultImg, fMin, fMax)
+        normalizedImg = self.normalizeImg(resultImg, fMax, fMin)
         self.show(img1, img2, normalizedImg)
-
-#To jest chyba poprawne
-    def sumImageWithImage2(self, img1, img2):
-        QMax = 0
-        DMax = 0
-        X=0
-        fMax = 0
-        fMin = 255
-        img1 = cv2.imread(img1, cv2.IMREAD_GRAYSCALE)
-        img2 = cv2.imread(img2, cv2.IMREAD_GRAYSCALE)
-
-        if(img1.shape[0] != img2.shape[0] or img1.shape[1] != img2.shape[1]):
-            print("Obraz musi być ujednolicony")
-        width = img1.shape[1]
-        height = img1.shape[0]
-        normalizedImg = np.empty((height, width), dtype=np.uint8)
-        resultImg = np.empty((height, width), dtype=np.uint8)
-
-        for i in range(height):
-            for j in range(width):
-                L = int(img1[i, j]) + int(img2[i, j])
-
-                if QMax < L:
-                    QMax = L
-
-        if QMax > 255:
-            DMax = QMax - 255
-            X = DMax/255
-
-        for i in range(height):
-            for j in range(width):
-                L=(img1[i, j] - img1[i, j]*X) + (img2[i, j] - img2[i, j]*X)
-                resultImg[i, j] = np.ceil(L)
-
-                if fMin > L:
-                    fMin = L
-                if fMax < L:
-                    fMax = L
-
-        for i in range(height):
-            for j in range(width):
-                normalizedImg[i, j] = 255 * ((resultImg[i, j] - fMin)/(fMax - fMin))
-
-
-        #self.show(img1, img2, normalizedImg)
 
     def multiplyImgWithNumber(self, img, number):
         fMax = 0
